@@ -1,8 +1,9 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 export default (props) => {
+  const [isLoading, setIsLoading] = useState(false);
   const onDragStart = (event, nodeType) => {
     console.log(JSON.stringify(nodeType));
     event.dataTransfer.setData(
@@ -13,7 +14,7 @@ export default (props) => {
   };
 
   const saveDatas = async () => {
-    console.log(props);
+    setIsLoading(true);
     const save = await axios
       .post("https://shiny-gray-hippo.cyclic.cloud/flow", {
         uuid: uuidv4(),
@@ -22,6 +23,7 @@ export default (props) => {
       })
       .then((res) => {
         if (res.status === 201) {
+          setIsLoading(false);
           alert("flow created successfully");
         }
         console.log(res);
@@ -94,7 +96,7 @@ export default (props) => {
         }}
         onClick={() => saveDatas()}
       >
-        Save
+        {isLoading ? "Loading....." : "Save"}
       </button>
     </aside>
   );
