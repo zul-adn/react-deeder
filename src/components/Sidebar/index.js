@@ -225,7 +225,7 @@ export default (props) => {
           paddingTop: 10,
           paddingBottom: 10,
         }}
-        onClick={() => setIsOpen(true)}
+        onClick={() => openModal("inputText")}
       >
         {isLoading ? "Loading....." : "Save"}
       </button>
