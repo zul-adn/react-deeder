@@ -248,7 +248,7 @@ export default (props) => {
           }}
         >
           {type === "inputText" && (
-            <>
+            <div>
               <input
                 type="text"
                 onChange={(e) => setFlowName(e.target.value)}
@@ -271,7 +271,7 @@ export default (props) => {
               >
                 Save
               </div>
-            </>
+            </div>
           )}
 
           {type === "state" && <div>{dataToShow}</div>}
