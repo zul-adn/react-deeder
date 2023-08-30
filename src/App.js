@@ -80,11 +80,16 @@ const DnDFlow = () => {
     console.log(object);
   };
 
-  const onLoad = (e) => {
-    console.log("onload", e);
-    setNodes(JSON.parse(e.nodes));
-    setEdges(JSON.parse(e.edges));
-  };
+  const onLoad = useCallback(
+    (e) => {
+      const restoreFlow = async () => {
+        setNodes(JSON.parse(e.nodes) || []);
+        setEdges(JSON.parse(e.edges) || []);
+      };
+      restoreFlow();
+    },
+    [setNodes, setEdges]
+  );
 
   return (
     <div className="dndflow">
@@ -101,7 +106,6 @@ const DnDFlow = () => {
             onDragOver={onDragOver}
             fitView
             onNodeDoubleClick={dbClickNodes}
-            nodeTypes={nodeTypes}
           >
             <Controls />
           </ReactFlow>
