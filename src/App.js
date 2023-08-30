@@ -25,7 +25,7 @@ const initialNodes = [
 const nodeTypes = { textUpdater: TextUpdaterNode };
 
 let id = 0;
-const getId = () => `dndnode_${id++}`;
+const getId = () => `${id++}`;
 
 const DnDFlow = () => {
   const reactFlowWrapper = useRef(null);
@@ -68,7 +68,7 @@ const DnDFlow = () => {
         id: getId(),
         type: nodeData.type,
         position,
-        data: { label: `${nodeData.label}` },
+        data: { label: `${nodeData.label}`, name: nodeData.name },
       };
 
       setNodes((nds) => nds.concat(newNode));
@@ -78,6 +78,12 @@ const DnDFlow = () => {
 
   const dbClickNodes = (e, object) => {
     console.log(object);
+  };
+
+  const onLoad = (e) => {
+    console.log("onload", e);
+    setNodes(JSON.parse(e.nodes));
+    setEdges(JSON.parse(e.edges));
   };
 
   return (
@@ -101,7 +107,7 @@ const DnDFlow = () => {
           </ReactFlow>
         </div>
 
-        <Sidebar content={nodes} />
+        <Sidebar nodes={nodes} edges={edges} onLoad={(v) => onLoad(v)} />
       </ReactFlowProvider>
     </div>
   );
