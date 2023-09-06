@@ -21,6 +21,8 @@ export default (props) => {
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const [flowName, setFlowName] = React.useState("no name");
   const [datas, setDatas] = React.useState([]);
+  const [wa, setWA] = useState("");
+  const [msg, setMsg] = useState("");
   const [type, setType] = React.useState("");
   const [dataToShow, setDataToShow] = useState("");
 
@@ -78,12 +80,13 @@ export default (props) => {
   };
 
   const runXstate = async () => {
+    setIsOpen(false);
     await axios
       .post(
         "https://5nugdpmqcyk7nedh2ofrzu72he0puqtk.lambda-url.eu-central-1.on.aws/ ",
         {
-          name: "zukl",
-          phoneNumber: "1234567890",
+          name: msg,
+          phoneNumber: wa,
         }
       )
       .then((res) => {
@@ -147,7 +150,7 @@ export default (props) => {
                   marginLeft: 5,
                   color: "white",
                 }}
-                onClick={() => runXstate()}
+                onClick={() => openModal("wa")}
               >
                 run
               </div>
@@ -225,7 +228,7 @@ export default (props) => {
           paddingTop: 10,
           paddingBottom: 10,
         }}
-        onClick={() => setIsOpen(true)}
+        onClick={() => openModal("inputText")}
       >
         {isLoading ? "Loading....." : "Save"}
       </button>
@@ -244,13 +247,48 @@ export default (props) => {
             flexDirection: "column",
           }}
         >
-          {type === "inputText" && (
+          {/* {type !== "state" && type !== "wa" && ( */}
+          <div>
+            <input
+              type="text"
+              onChange={(e) => setFlowName(e.target.value)}
+              style={{ padding: 8, width: "100%" }}
+              placeholder="Name of flow"
+            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#0984e3",
+                width: "100%",
+                marginTop: 5,
+                padding: 8,
+                borderRadius: 5,
+                color: "white",
+              }}
+              onClick={() => saveDatas()}
+            >
+              Save
+            </div>
+          </div>
+          {/* )} */}
+
+          {type === "state" && <div>{dataToShow}</div>}
+
+          {type === "wa" && (
             <>
               <input
                 type="text"
-                onChange={(e) => setFlowName(e.target.value)}
+                onChange={(e) => setWA(e.target.value)}
+                style={{ padding: 8, width: "100%", marginBottom: 5 }}
+                placeholder="WhatsApp Number"
+              />
+              <input
+                type="text"
+                onChange={(e) => setMsg(e.target.value)}
                 style={{ padding: 8, width: "100%" }}
-                placeholder="Name of flow"
+                placeholder="Messages"
               />
               <div
                 style={{
@@ -264,14 +302,12 @@ export default (props) => {
                   borderRadius: 5,
                   color: "white",
                 }}
-                onClick={() => saveDatas()}
+                onClick={() => runXstate()}
               >
                 Save
               </div>
             </>
           )}
-
-          {type === "state" && <div>{dataToShow}</div>}
         </div>
       </Modal>
     </aside>
