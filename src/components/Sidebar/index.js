@@ -247,32 +247,32 @@ export default (props) => {
             flexDirection: "column",
           }}
         >
-          {type !== "state" && type !== "wa" && (
-            <div>
-              <input
-                type="text"
-                onChange={(e) => setFlowName(e.target.value)}
-                style={{ padding: 8, width: "100%" }}
-                placeholder="Name of flow"
-              />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "#0984e3",
-                  width: "100%",
-                  marginTop: 5,
-                  padding: 8,
-                  borderRadius: 5,
-                  color: "white",
-                }}
-                onClick={() => saveDatas()}
-              >
-                Save
-              </div>
+          {/* {type !== "state" && type !== "wa" && ( */}
+          <div>
+            <input
+              type="text"
+              onChange={(e) => setFlowName(e.target.value)}
+              style={{ padding: 8, width: "100%" }}
+              placeholder="Name of flow"
+            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#0984e3",
+                width: "100%",
+                marginTop: 5,
+                padding: 8,
+                borderRadius: 5,
+                color: "white",
+              }}
+              onClick={() => saveDatas()}
+            >
+              Save
             </div>
-          )}
+          </div>
+          {/* )} */}
 
           {type === "state" && <div>{dataToShow}</div>}
 
