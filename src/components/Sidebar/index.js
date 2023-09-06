@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { xstateTransform } from "../../utils/xstateTransform";
 import Modal from "react-modal";
+import { useMachine } from "@xstate/react";
+import { machine } from "../../xstate";
 
 const customStyles = {
   content: {
@@ -25,6 +27,7 @@ export default (props) => {
   const [msg, setMsg] = useState("");
   const [type, setType] = React.useState("");
   const [dataToShow, setDataToShow] = useState("");
+  const [state, send] = useMachine(machine);
 
   React.useEffect(() => {
     loadDatas();
@@ -80,18 +83,27 @@ export default (props) => {
   };
 
   const runXstate = async () => {
+    console.log("RUN");
     setIsOpen(false);
-    await axios
-      .post(
-        "https://5nugdpmqcyk7nedh2ofrzu72he0puqtk.lambda-url.eu-central-1.on.aws/ ",
-        {
-          name: msg,
-          phoneNumber: wa,
-        }
-      )
-      .then((res) => {
-        console.log(res);
-      });
+    send({
+      type: "SEND",
+      body: {
+        name: msg,
+        phoneNumber: wa,
+      },
+    });
+
+    // await axios
+    //   .post(
+    //     "https://5nugdpmqcyk7nedh2ofrzu72he0puqtk.lambda-url.eu-central-1.on.aws/ ",
+    //     {
+    //       name: msg,
+    //       phoneNumber: wa,
+    //     }
+    //   )
+    //   .then((res) => {
+    //     console.log(res);
+    //   });
   };
 
   return (
@@ -237,6 +249,7 @@ export default (props) => {
         onRequestClose={closeModal}
         style={customStyles}
         contentLabel="Example Modal"
+        ariaHideApp={false}
       >
         <h2>Flow Name</h2>
         <div
