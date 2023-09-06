@@ -247,7 +247,7 @@ export default (props) => {
             flexDirection: "column",
           }}
         >
-          {type === "inputText" && (
+          {type !== "state" && type !== "wa" && (
             <div>
               <input
                 type="text"
