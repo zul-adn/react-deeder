@@ -3,7 +3,7 @@ import { Handle, Position } from "reactflow";
 
 const handleStyle = { left: 10 };
 
-function TextUpdaterNode({ data, isConnectable }) {
+function ConditionalTextUpdaterNode({ data, isConnectable }) {
   const onChange = useCallback((evt) => {
     console.log(evt.target.value);
   }, []);
@@ -31,7 +31,7 @@ function TextUpdaterNode({ data, isConnectable }) {
         }}
       >
         <label htmlFor="text" style={{ marginBottom: 5, fontSize: 12 }}>
-          Message
+          Conditional Message
         </label>
         <textarea
           onChange={onChange}
@@ -43,12 +43,18 @@ function TextUpdaterNode({ data, isConnectable }) {
 
       <Handle
         type="source"
-        position={Position.Bottom}
+        position={Position.Left}
         id="b"
+        isConnectable={isConnectable}
+      />
+      <Handle
+        type="source"
+        position={Position.Right}
+        id="c"
         isConnectable={isConnectable}
       />
     </div>
   );
 }
 
-export default TextUpdaterNode;
+export default ConditionalTextUpdaterNode;

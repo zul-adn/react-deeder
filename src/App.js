@@ -10,8 +10,20 @@ import "reactflow/dist/style.css";
 
 import Sidebar from "./components/Sidebar";
 import TextUpdaterNode from "./components/TextUpdater";
+import ConditionalNode from "./components/Nodes/Conditional";
+import ConditionlMessage from "./components/Nodes/ConditionalMessage";
+import ConditionlOptions from "./components/Nodes/conditionalOptions";
+import ConditionlOptionsNo from "./components/Nodes/conditionalOptionsNo";
 
 import "./App.css";
+
+const nodeTypes = {
+  textUpdater: TextUpdaterNode,
+  conditionalNode: ConditionalNode,
+  conditionalMsg: ConditionlMessage,
+  conditionalOptions: ConditionlOptions,
+  conditionalOptionsNo: ConditionlOptionsNo,
+};
 
 const initialNodes = [
   // {
@@ -21,8 +33,6 @@ const initialNodes = [
   //   position: { x: 250, y: 5 },
   // },
 ];
-
-const nodeTypes = { textUpdater: TextUpdaterNode };
 
 let id = 0;
 const getId = () => `${id++}`;
@@ -71,10 +81,86 @@ const DnDFlow = () => {
         data: { label: `${nodeData.label}`, name: nodeData.name },
       };
 
+      if (nodeData.type === "conditionalMsg") {
+        conditionalFlow();
+        return;
+      }
+
       setNodes((nds) => nds.concat(newNode));
     },
     [reactFlowInstance]
   );
+
+  const conditionalFlow = () => {
+    const newNode = [
+      {
+        id: "main-condition",
+        type: "conditionalMsg",
+        data: { label: "Input Node" },
+        position: { x: 0, y: 0 },
+      },
+      {
+        id: "cond-yes",
+        type: "conditionalOptions",
+        data: { label: "yes" },
+        position: { x: -100, y: 0 },
+      },
+      {
+        id: "cond-no",
+        type: "conditionalOptionsNo",
+        data: { label: "no" },
+        position: { x: 200, y: 0 },
+      },
+      {
+        id: "cond-opt-yes",
+        type: "textUpdater",
+        data: { label: "Input Node" },
+        position: { x: -200, y: 100 },
+      },
+      {
+        id: "cond-opt-no",
+        type: "textUpdater",
+        data: { label: "Input Node" },
+        position: { x: 100, y: 100 },
+      },
+    ];
+
+    const newEdges = [
+      {
+        id: "1",
+        source: "main-condition",
+        target: "cond-yes",
+        animated: true,
+        type: "step",
+      },
+      {
+        id: "2",
+        source: "cond-yes",
+        target: "cond-opt-yes",
+        animated: true,
+        type: "step",
+      },
+      {
+        id: "2",
+        source: "main-condition",
+        target: "cond-no",
+        animated: true,
+        type: "step",
+        sourceHandle: "c",
+      },
+      {
+        id: "3",
+        source: "cond-no",
+        target: "cond-opt-no",
+        animated: true,
+        type: "step",
+        sourceHandle: "c",
+      },
+    ];
+    setNodes((nds) => nds.concat(newNode));
+    setEdges((edg) => edg.concat(newEdges));
+    //setNodes((nds) => [...nds, nodes]);
+  };
 
   const dbClickNodes = (e, object) => {
     console.log(object);
@@ -106,6 +192,7 @@ const DnDFlow = () => {
             onDragOver={onDragOver}
             fitView
             onNodeDoubleClick={dbClickNodes}
+            nodeTypes={nodeTypes}
           >
             <Controls />
           </ReactFlow>

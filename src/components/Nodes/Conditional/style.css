@@ -1,0 +1,6 @@
+.pentagonShape {
+  /* height: 200px;
+    width: 200px; */
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  background-color: red;
+}

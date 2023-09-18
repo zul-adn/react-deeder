@@ -198,7 +198,7 @@ export default (props) => {
         className="dndnode input"
         onDragStart={(event) =>
           onDragStart(event, {
-            type: "default",
+            type: "textUpdater",
             label: "Send Whatsapp",
             name: "sendWhatsApp",
           })
@@ -206,6 +206,19 @@ export default (props) => {
         draggable
       >
         Send WhatsApp
+      </div>
+      <div
+        className="dndnode input"
+        onDragStart={(event) =>
+          onDragStart(event, {
+            type: "conditionalMsg",
+            label: "Conditional",
+            name: "conditional",
+          })
+        }
+        draggable
+      >
+        Conditional Message
       </div>
       <div
         className="dndnode"
@@ -244,6 +257,7 @@ export default (props) => {
       >
         {isLoading ? "Loading....." : "Save"}
       </button>
+
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
