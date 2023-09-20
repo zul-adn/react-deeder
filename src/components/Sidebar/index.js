@@ -28,6 +28,7 @@ export default (props) => {
   const [type, setType] = React.useState("");
   const [dataToShow, setDataToShow] = useState("");
   const [state, send] = useMachine(machine);
+  const [flow, setFlow] = useState(null);
 
   React.useEffect(() => {
     loadDatas();
@@ -52,6 +53,30 @@ export default (props) => {
   };
 
   const saveDatas = async () => {
+    const initMsg = props.nodes?.find((nd) => nd.id === "main-condition");
+    const yesMsg = props.nodes?.find((nd) => nd.id === "cond-opt-yes");
+    const noMsg = props.nodes?.find((nd) => nd.id === "cond-opt-no");
+
+    const body = {
+      flow_name: flowName,
+      action: [
+        {
+          id: "main",
+          msg: initMsg.data?.msg,
+        },
+        {
+          id: "yes",
+          msg: yesMsg.data?.msg,
+        },
+        {
+          id: "no",
+          msg: noMsg.data?.msg,
+        },
+      ],
+    };
+
+    console.log(body);
+
     setIsOpen(false);
     setIsLoading(true);
     const xstate = await xstateTransform(props);
@@ -59,7 +84,7 @@ export default (props) => {
       .post("https://shiny-gray-hippo.cyclic.cloud/flow", {
         uuid: uuidv4(),
         organization_uuid: uuidv4(),
-        flow: JSON.stringify(xstate),
+        flow: JSON.stringify(body),
         nodes: JSON.stringify(props.nodes),
         edges: JSON.stringify(props.edges),
         name: flowName,
@@ -104,6 +129,21 @@ export default (props) => {
     //   .then((res) => {
     //     console.log(res);
     //   });
+  };
+
+  const runFlow = () => {
+    axios
+      .post(
+        "https://b4ee-2001-448a-6080-672c-b8e5-1c9b-e194-6cf1.ngrok.io/whatsapp/sendwa",
+        {
+          senderId: wa,
+          flowId: flow._id,
+        }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -162,7 +202,10 @@ export default (props) => {
                   marginLeft: 5,
                   color: "white",
                 }}
-                onClick={() => openModal("wa")}
+                onClick={() => {
+                  openModal("wa");
+                  setFlow(data);
+                }}
               >
                 run
               </div>
@@ -311,12 +354,7 @@ export default (props) => {
                 style={{ padding: 8, width: "100%", marginBottom: 5 }}
                 placeholder="WhatsApp Number"
               />
-              <input
-                type="text"
-                onChange={(e) => setMsg(e.target.value)}
-                style={{ padding: 8, width: "100%" }}
-                placeholder="Messages"
-              />
+
               <div
                 style={{
                   display: "flex",
@@ -329,7 +367,7 @@ export default (props) => {
                   borderRadius: 5,
                   color: "white",
                 }}
-                onClick={() => runXstate()}
+                onClick={() => runFlow()}
               >
                 Save
               </div>

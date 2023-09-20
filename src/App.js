@@ -163,7 +163,8 @@ const DnDFlow = () => {
   };
 
   const dbClickNodes = (e, object) => {
-    console.log(object);
+    // console.log(object);
+    console.log(e);
   };
 
   const onLoad = useCallback(

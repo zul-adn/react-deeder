@@ -6,6 +6,8 @@ const handleStyle = { left: 10 };
 function TextUpdaterNode({ data, isConnectable }) {
   const onChange = useCallback((evt) => {
     console.log(evt.target.value);
+    data.msg = evt.target.value;
+    console.log(data);
   }, []);
 
   return (
