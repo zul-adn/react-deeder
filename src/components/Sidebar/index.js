@@ -134,7 +134,7 @@ export default (props) => {
   const runFlow = () => {
     axios
       .post(
-        "https://b4ee-2001-448a-6080-672c-b8e5-1c9b-e194-6cf1.ngrok.io/whatsapp/sendwa",
+        "https://8920-2001-448a-6080-672c-b8e5-1c9b-e194-6cf1.ngrok-free.app/whatsapp/sendwa",
         {
           senderId: wa,
           flowId: flow._id,
